@@ -1,0 +1,31 @@
+name: Metrics
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # jalan otomatis tiap hari jam 00:00 UTC
+  workflow_dispatch:       # bisa dijalanin manual dari tab Actions
+  push:
+    branches: ["main"]
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics.svg
+
+          # --- pilih plugin/section yang mau ditampilkan ---
+          base: header, activity, community, repositories
+          plugin_languages: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_lines: yes
+          plugin_traffic: no
+          plugin_achievements: yes
+          plugin_achievements_threshold: C
+
+          # --- tampilan ---
+          config_timezone: Asia/Jakarta
